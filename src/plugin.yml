@@ -1,0 +1,12 @@
+name: MicroBlocks
+description: per-player blocks!
+author: FlailoftheLord
+
+# stuffs
+prefix: MicroBlocks
+website: flailofthelord.github.io
+softdepend: [MicroCommands, WorldGuard]
+
+main: me.flail.microblocks.MicroBlocks
+version: 1.0.0
+api-version: 1.14
