@@ -33,12 +33,13 @@ public class UserBlockHandler extends Logger {
 	 * @return true if the block was placed successfully. false otherwise.
 	 */
 	public boolean blockPlaceCheck(User user, Block blockPlaced, BlockState previousState, ItemStack itemUsed) {
+		boolean isOwner = true;
+		MetadataValue metadata = new FixedMetadataValue(plugin, user.id());
 
-		for (int radius = -(PROTECTION_RADIUS); radius <= PROTECTION_RADIUS; radius++) {
+		for (int radius = PROTECTION_RADIUS * -1; radius <= PROTECTION_RADIUS; radius++) {
 			Block block = blockPlaced.getRelative(radius, radius, radius);
 
 			if (block.hasMetadata(PLACED_METADATA)) {
-				boolean isOwner = true;
 
 				for (MetadataValue dataValue : block.getMetadata(PLACED_METADATA)) {
 					if (dataValue.getOwningPlugin().getName().equalsIgnoreCase("MicroBlocks")) {
@@ -52,23 +53,33 @@ public class UserBlockHandler extends Logger {
 
 				}
 
-				if (!isOwner) {
-					blockPlaced.setBlockData(previousState.getBlockData());
-					blockPlaced.setType(previousState.getType());
-
-					ItemStack item = new ItemStack(itemUsed);
-					item.setAmount(1);
-					itemUsed.setAmount(itemUsed.getAmount() - 1);
-					user.player().getInventory().addItem(item);
-				}
-
-				return isOwner;
+				continue;
 			}
+
+			block.setMetadata(PLACED_METADATA, metadata);
 
 		}
 
-		blockPlaced.setMetadata(PLACED_METADATA, new FixedMetadataValue(plugin, user.id()));
-		return true;
+		if (!isOwner) {
+			blockPlaced.setBlockData(previousState.getBlockData());
+			blockPlaced.setType(previousState.getType());
+
+			ItemStack item = new ItemStack(itemUsed);
+			item.setAmount(1);
+			itemUsed.setAmount(itemUsed.getAmount() - 1);
+			user.player().getInventory().addItem(item);
+
+			return isOwner;
+		}
+
+		blockPlaced.setMetadata(PLACED_METADATA, metadata);
+		return isOwner;
+	}
+
+	public boolean blockDestroyCheck(User user, Block block) {
+		boolean isOwner = true;
+
+		return isOwner;
 	}
 
 }
