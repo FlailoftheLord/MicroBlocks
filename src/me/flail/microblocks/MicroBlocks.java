@@ -1,7 +1,9 @@
 package me.flail.microblocks;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Server;
@@ -16,6 +18,8 @@ import me.flail.microblocks.user.User;
 public class MicroBlocks extends JavaPlugin {
 
 	public Map<UUID, User> userMap = new LinkedHashMap<>();
+
+	public Set<UUID> msgCooldowns = new LinkedHashSet<>();
 
 	public Server server;
 	public PluginManager pluginManager;

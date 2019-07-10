@@ -7,6 +7,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 import me.flail.microblocks.mcb.UserBlockHandler;
 import me.flail.microblocks.tools.Logger;
@@ -24,19 +25,38 @@ public class BlockListener extends Logger implements Listener {
 			Block block = event.getBlock();
 			BlockState previousBlock = event.getBlockReplacedState();
 
-			boolean blockPlaced = new UserBlockHandler().blockPlaceCheck(user, block, previousBlock, event.getItemInHand());
+			boolean blockPlaced = new UserBlockHandler().blockPlaceCheck(user, block, previousBlock);
 			if (!blockPlaced) {
 
 				new Message("CantPlaceBlockHere").send(user, null);
 			}
 
+		}
 
+	}
+
+	@EventHandler(priority = EventPriority.LOW)
+	public void onDestroy(BlockBreakEvent event) {
+		if (!event.isCancelled()) {
+			User user = new User(event.getPlayer().getUniqueId());
+
+			Block block = event.getBlock();
+
+			boolean canBeBroken = new UserBlockHandler().blockDestroyCheck(user, block);
+
+			event.setCancelled(!canBeBroken);
+
+			if (!canBeBroken) {
+
+				new Message("CantBreakBlockHere").send(user, null);
+			}
 		}
 
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onDestroy(BlockBreakEvent event) {
+	public void onInteract(PlayerInteractEvent event) {
+
 
 	}
 
