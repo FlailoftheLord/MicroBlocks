@@ -1,9 +1,11 @@
 package me.flail.microblocks.mcb;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -40,7 +42,6 @@ public class UserBlockHandler extends Logger {
 				block.setMetadata(PLACED_METADATA, metadata);
 			}
 
-			console("blocks aren't owned by another player.");
 			isOwner = true;
 		}
 
@@ -76,6 +77,7 @@ public class UserBlockHandler extends Logger {
 			MetadataValue dataValue = block.getMetadata(PLACED_METADATA).get(0);
 			if (dataValue.getOwningPlugin().getName().equalsIgnoreCase("MicroBlocks")) {
 				UUID blockOwner = UUID.fromString(dataValue.asString());
+				console(Bukkit.getPlayer(blockOwner).getName());
 
 				if ((blockOwner != null) && !blockOwner.equals(user.uuid())) {
 					isOwner = false;
@@ -109,18 +111,39 @@ public class UserBlockHandler extends Logger {
 		Set<Block> blocks = new HashSet<>();
 
 		int radius = PROTECTION_RADIUS * -1;
-		while (radius <= PROTECTION_RADIUS) {
-			blocks.add(block.getRelative(radius, radius, radius));
 
-			radius++;
+		for (int x = radius * 1; x <= PROTECTION_RADIUS; x++) {
+			for (int y = radius * 1; y <= PROTECTION_RADIUS; y++) {
+				for (int z = radius * 1; z <= PROTECTION_RADIUS; z++) {
+
+					blocks.add(block.getRelative(x, y, z));
+
+				}
+			}
 		}
 
 		return blocks;
 	}
 
 	private UUID getOwner(Block block) {
+		if (block.hasMetadata(PLACED_METADATA)) {
+			List<MetadataValue> dataValues = block.getMetadata(PLACED_METADATA);
+			UUID blockOwner;
 
-		return block.hasMetadata(PLACED_METADATA) ? UUID.fromString(block.getMetadata(PLACED_METADATA).get(0).asString()) : null;
+			for (MetadataValue value : dataValues) {
+				try {
+					blockOwner = UUID.fromString(value.asString());
+
+					return blockOwner;
+				} catch (Throwable t) {
+					continue;
+				}
+
+			}
+
+		}
+
+		return null;
 	}
 
 }

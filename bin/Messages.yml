@@ -1,5 +1,5 @@
 # Set all messages here!
 Prefix: "&8(&2&lBlocks&8)"
-CantPlaceBlockHere: "%prefix% &cYou can't place this block here!"
-CantBreakBlockHere: "%prefix% &cYou can't break this block here!"
+CantPlaceBlockHere: "%prefix% &cYou can't place this block here. It's too close to blocks owned by %block-owner%"
+CantBreakBlockHere: "%prefix% &cYou can't break this block. It's owned by &7%block-owner%"
 BlockIsOwnedBy: "%prefix% &cThis block is owned by &7%block-owner%"
