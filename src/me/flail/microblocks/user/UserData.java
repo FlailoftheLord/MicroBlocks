@@ -19,11 +19,15 @@ public class UserData extends Logger {
 
 	protected UserData(UUID playerUuid) {
 		this.playerUuid = playerUuid;
-		file = new DataFile("/PlayerData/" + playerUuid + ".yml");
+		file = new DataFile("/PlayerData/" + playerUuid + "/UserData.yml");
 	}
 
 	protected DataFile getDataFile() {
 		return file;
+	}
+
+	public DataFile getBlockData() {
+		return new DataFile("/PlayerData/" + playerUuid + "/BlockData.yml");
 	}
 
 	protected void loadDefaultValues(User user) {

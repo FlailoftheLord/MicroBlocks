@@ -50,6 +50,10 @@ public class DataFile extends Logger {
 		plugin.saveResource(fileName, overwrite);
 	}
 
+	public File file() {
+		return file;
+	}
+
 	protected DataFile save(FileConfiguration config) {
 		try {
 			config.save(file);

@@ -12,6 +12,9 @@ public class Settings extends Logger {
 		settings = user.dataFile();
 	}
 
+	/**
+	 * use {@link #load()} to load the settings for the first time the server starts.
+	 */
 	public Settings() {
 		settings = new DataFile("Settings.yml");
 
@@ -26,6 +29,7 @@ public class Settings extends Logger {
 	private void loadDefaultValues() {
 		Map<String, Object> values = new HashMap<>();
 
+		values.put("DataSaveInterval", Integer.valueOf(3));
 
 		setValues(settings, values);
 	}
@@ -46,7 +50,9 @@ public class Settings extends Logger {
 			"                                                                  #\r\n" +
 			"==================================================================#\r\n" +
 			"-----------------------------------------------------------------\r\n" +
-			"- - -\r\n";
+			"- - -\r\n" +
+			" Set the Data saving interval in minutes.\r\n" +
+			" This saves all block and user data to the database, can be very laggy if there are alot of players online.\r\n";
 
 
 

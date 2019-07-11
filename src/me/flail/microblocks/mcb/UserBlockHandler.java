@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -77,7 +76,6 @@ public class UserBlockHandler extends Logger {
 			MetadataValue dataValue = block.getMetadata(PLACED_METADATA).get(0);
 			if (dataValue.getOwningPlugin().getName().equalsIgnoreCase("MicroBlocks")) {
 				UUID blockOwner = UUID.fromString(dataValue.asString());
-				console(Bukkit.getPlayer(blockOwner).getName());
 
 				if ((blockOwner != null) && !blockOwner.equals(user.uuid())) {
 					isOwner = false;
@@ -89,6 +87,9 @@ public class UserBlockHandler extends Logger {
 
 		if (isOwner) {
 			block.removeMetadata(PLACED_METADATA, plugin);
+			for (Block b : getSurroundingBlocks(block)) {
+				b.removeMetadata(PLACED_METADATA, plugin);
+			}
 		}
 
 		return isOwner;
@@ -117,7 +118,6 @@ public class UserBlockHandler extends Logger {
 				for (int z = radius * 1; z <= PROTECTION_RADIUS; z++) {
 
 					blocks.add(block.getRelative(x, y, z));
-
 				}
 			}
 		}
@@ -144,6 +144,15 @@ public class UserBlockHandler extends Logger {
 		}
 
 		return null;
+	}
+
+	public static boolean isBlockOwnedBy(User user, Block block) {
+		if (plugin.blockData.containsKey(user)) {
+
+			return plugin.blockData.get(user).contains(block.getLocation());
+		}
+
+		return false;
 	}
 
 }

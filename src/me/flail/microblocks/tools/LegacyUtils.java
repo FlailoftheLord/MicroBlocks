@@ -8,7 +8,7 @@ import org.bukkit.persistence.PersistentDataType;
 import me.flail.microblocks.MicroBlocks;
 
 public class LegacyUtils {
-	protected MicroBlocks plugin = MicroBlocks.getPlugin(MicroBlocks.class);
+	protected static MicroBlocks plugin = MicroBlocks.getPlugin(MicroBlocks.class);
 
 	protected ItemStack addLegacyTag(ItemStack item, String key, String tag) {
 		ItemMeta meta = item.getItemMeta();
